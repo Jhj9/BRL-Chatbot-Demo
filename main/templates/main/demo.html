@@ -53,16 +53,13 @@
       <p id="context" style="line-height: 2;">
       </p>
       <br>
-      <div class="quiz" id="quiz1">
-       <div class="container">
-          <form>
-            <input type="text" class="input" id="inputDirect1" name="inputDirect1" autocomplete="off" placeholder="Enter your answer (English Only)"/>
-          </form>
-        </div>
+      <div class="results" id="result">
+        <div id="result0"></div>
+        <div id="result1"></div>
+        <div id="result2"></div>
       </div>
-      <div class="results" id="result1"></div>
       <div>
-        <button class="submit" id="submit1">Submit</button>
+        <button class="submit" id="submit1">Generate</button>
         <a href="{% url 'demo' %}" style="text-decoration:none;margin-left:350px"><button class="submit" id="retry">&nbsp;Next <b>→</b></button></a>
       </div>
     </div>
@@ -88,8 +85,7 @@
           Prof. Jinyeong Bak, jy.bak@skku.edu<br><br>
         </div>
         <div class="footer" style="margin-left:80px;">
-          <img src="{%static 'skku.png' %}" alt="SKKU" width="130" height="auto" style="image-rendering: -webkit-optimize-contrast; margin-bottom:5px;"><br>
-          <img src="{%static 'super.png' %}" alt="Super" width="130" height="auto" style="image-rendering: -webkit-optimize-contrast;margin-bottom:5px;">
+          <img src="{%static 'skku.png' %}" alt="SKKU" width="150" height="auto"  style="image-rendering: -webkit-optimize-contrast; margin-bottom:5px; vertical-align:baseline"><br>
         </div>
     </div>
   </footer>
@@ -100,7 +96,7 @@
     $(document).on("keydown", "form", function(event) {
         return event.key != "Enter";
     });
-    $("#result1").hide();
+    $("#result").hide();
     $.getJSON( "./static/Q.json", function( json ) {
       n = Math.floor(Math.random()*json.length);
       user = ['A','B'];
@@ -117,35 +113,38 @@
 
     function showResult(btn){
       loader.setReload(true);
-      answer = $("#inputDirect"+btn).val();
       gold = data.gold;
 
       $.ajax({
         type: "POST",
         url: "{% url "submit" %}",
-        data: JSON.stringify({"quiz" : btn, "gold" : gold, "answer" : answer}),
+        data: JSON.stringify({"gold" : gold}),
         success: function (response) {
           loader.off();
-          const regExp = /[ㄱ-ㅎㅏ-ㅣ가-힣]/g;
-          score_r = 0;
-          score_b = 0;
-          if (!regExp.test(answer)) {
-            score_r = response.rouge_score;
-            score_b = response.bert_score;
-          };
-          $("#result"+btn).html(`<div style="color:#384269"><p style="margin-bottom:30px;"><b>" ${answer} "</b></p>Word-Level Score : <b>${score_r}</b>/100
-          <div class="w3-progress-container w3-round-xlarge" style="margin-bottom:12px;">
-            <div class="w3-progressbar w3-round-xlarge" id="progressbar_r" style="width:0%">
+          ex = response.ex;
+          score_r = response.rouge_score;
+          score_b = response.bert_score;
+
+          //$("#ex1").html("1. "+ex[0]);
+          //$("#ex2").html("2. "+ex[1]);
+          //$("#ex3").html("3. "+ex[2]);
+
+          $("#result").slideDown();
+          for(i=0; i<3; i++){
+            $("#result"+String(i)).html(`<div style="color:#384269"><p style="margin-bottom:30px;">
+            <b>" ${ex[i]} "</b></p>Word-Level Score : <b>${score_r[i]}</b>/100
+            <div class="w3-progress-container w3-round-xlarge" style="margin-bottom:12px;">
+              <div class="w3-progressbar w3-round-xlarge" id="progressbar_r`+String(i)+`" style="width:0%">
+              </div>
             </div>
-          </div>
-          Context-Level Score : <b>${score_b}</b>/100<br>
-          <div class="w3-progress-container w3-round-xlarge">
-            <div class="w3-progressbar w3-round-xlarge" id="progressbar_b" style="width:0%">
+            Context-Level Score : <b>${score_b[i]}</b>/100<br>
+            <div class="w3-progress-container w3-round-xlarge">
+              <div class="w3-progressbar w3-round-xlarge" id="progressbar_b`+String(i)+`" style="width:0%">
+              </div>
             </div>
-          </div>
-          <br></div>`);
-          $("#result"+btn).slideDown();
-          progress(score_r, score_b);
+            <br></div>`);
+            progress(score_r[i], score_b[i], String(i));
+          }
         },
         error: function(){
           loader.off();
@@ -157,8 +156,8 @@
     };
 
 
-    function progress(score_r, score_b){
-      var elem = document.getElementById("progressbar_r");
+    function progress(score_r, score_b, n){
+      var elem = document.getElementById("progressbar_r"+n);
       var width = 0;
       var id = setInterval(frame, 5);
       function frame() {
@@ -169,7 +168,7 @@
           elem.style.width = width + '%';
         }
       };
-      var elem1 = document.getElementById("progressbar_b");
+      var elem1 = document.getElementById("progressbar_b"+n);
       var width1 = 0;
       var id1 = setInterval(frame1, 5);
       function frame1() {
