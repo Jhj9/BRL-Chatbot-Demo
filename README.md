@@ -1,5 +1,5 @@
-# HLILab_Evaluation_Demo_v1
-HLILab_Evaluation_Demo_v1
+# HLILab_Evaluation_Demo_v2
+HLILab_Evaluation_Demo_v2
 
 Pycharm
 
@@ -7,7 +7,7 @@ Pycharm
 
 1) Get from VCS로 시작하기
 
-2) https://github.com/Jhj9/HLILab_Evaluation_Demo_v1.git <br>
+2) https://github.com/Jhj9/HLILab_Evaluation_Demo_v2.git <br>
 입력해서 clone<br>
 
 3) Terminal에<br> 
@@ -15,6 +15,7 @@ Pycharm
   pip install rouge <br>
   pip install datasets <br>
   pip install bert_score <br>
+  pip install nltk <br>
 입력
 
 4) mysite/secrets.json 생성 후 SECRET_KEY 입력 <br>
@@ -28,8 +29,3 @@ Pycharm
 6) Terminal에 뜨는 <br>
   http://127.0.0.1:8000/ <br>
 클릭해서 웹페이지 실행
-
-+)
-  - 페이지 확대해서 글 중간에 맞추기 <br>
-  - 직접입력 처음 실행하면 오래 걸리므로 미리 해 놓기
-  - 한글 입력할 시 점수 0점
