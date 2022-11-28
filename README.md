@@ -1,5 +1,5 @@
-# HLILab_Evaluation_Demo_v2
-HLILab_Evaluation_Demo_v2
+# 문맥에 맞는 대화 응답 자동 생성 및 응답 적절성 평가 프로그램
+문맥에 맞는 대화 응답 자동 생성 및 응답 적절성 평가 프로그램
 
 Pycharm
 
