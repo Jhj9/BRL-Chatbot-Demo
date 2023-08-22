@@ -26,18 +26,12 @@ Pycharm
 
 2) https://github.com/Jhj9/Conversation-Response-Generation-Demo.git clone<br>
 
-3) Terminal에 <br> 
-  pip install django <br>
-  pip install rouge <br>
-  pip install datasets <br>
-  pip install bert_score <br>
-  pip install nltk <br>
-  입력
+3) pip install -r requirements.txt<br>
 
-4) mysite/secrets.json 생성 후 SECRET_KEY 입력 <br>
+5) mysite/secrets.json 생성 후 SECRET_KEY 입력 <br>
   Ex) {"SECRET_KEY": "django-insecure-dml=장고시크릿키50자"} <br>
   https://djecrety.ir/
 
-5) Terminal에 python manage.py runserver 입력<br>
+6) Terminal에 python manage.py runserver 입력<br>
 
-6) http://127.0.0.1:8000/ 웹페이지 실행
+7) http://127.0.0.1:8000/ 웹페이지 실행
