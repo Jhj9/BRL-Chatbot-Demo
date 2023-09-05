@@ -2,7 +2,7 @@
 {% load static %}
 <html>
 <head>
-  <title>HLILab Evaluation Demo</title>
+  <title>BRL Bridge Chatbot Demo</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{% static 'submit.css' %}">
@@ -13,10 +13,13 @@
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript" src="https://nowonbun.github.io/Loader/loader.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap" rel="stylesheet">
   <style>
     body{
       font-size:15px;
-      font-family:'Montserrat';
+      font-family:'Montserrat','Noto Sans KR', sans-serif;
       font-weight:500;
       color:#555;
       padding-top:10px;
@@ -31,7 +34,7 @@
       <!--Sidebar Title    #f1f3ff-->
       <div class="w3-container w3-display-container w3-padding-16">
         <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-display-topright"></i>
-        <a href="/" style="text-decoration:none;"><h3 class="w3-wide" style="padding-top:10px;"><b>HLILab<br>Evaluation<br>Demo</b></h3></a>
+        <a href="/" style="text-decoration:none;"><h3 class="w3-wide" style="padding-top:10px;"><b>BRL Bridge<br>Chatbot<br>Demo</b></h3></a>
       </div>
       <div id="class1list" class="w3-bar-block w3-padding-large w3-medium">
             <a href="/" class="w3-bar-item w3-button">Description</a>
@@ -42,153 +45,109 @@
     <!-- !PAGE CONTENT! -->
     <div class="w3-main" style="margin-left:250px">
 
-    <!-- Top header -->
-    <header class="w3-container w3-xlarge">
-      <p class="w3-left-align" style="color:#000000"><b>Demo</b></p>
-    </header>
-    <div class="w3-container" id="class_content">
-      <p style="font-size:16px; color:#333;"><b>
-        Which of the following sentences is appropriate for a conversation?
-      </b></p>
-      <p id="context" style="line-height: 2;">
-      </p>
-      <br>
-      <div class="results" id="result">
-        <div id="result0"></div>
-        <div id="result1"></div>
-        <div id="result2"></div>
+      <!-- Top header -->
+      <header class="w3-container w3-xlarge">
+        <p class="w3-left-align" style="color:#000000"><b>Demo</b></p>
+      </header>
+      <div class="w3-container" id="class_content">
+          <div id="chat"></div>
+          <div class="container">
+            <form>
+              <input type="text" class="input" id="inputDirect" name="inputDirect" autocomplete="off" placeholder="Enter your question"/>
+            </form>
+            <button class="submit" id="submit1">Send</button>
+          </div>
       </div>
-      <div>
-        <button class="submit" id="submit1">Generate</button>
-        <a href="{% url 'demo' %}" style="text-decoration:none;margin-left:350px"><button class="submit" id="retry">&nbsp;Next <b>→</b></button></a>
-      </div>
-    </div>
-    <br><br><br><br>
-    <br><br><br><br>
-    <!-- End page content -->
+      <br><br><br><br>
+      <br><br><br><br>
+      <!-- End page content -->
     </div>
   </div>
   <footer id="footer">
       <div style="margin:auto;">
         <div class="footer">
           <p>About</p>
-          Human Language Intelligence Lab. @ SKKU<br>
+          Human Language Intelligence Lab. <br>@ SKKU<br>
           <a href="https://hli.skku.edu/links">https://hli.skku.edu/links</a>
         </div>
         <div class="footer">
           <p>Contributors</p>
-          Dongjun Kang, ehdwns2356@g.skku.edu<br>
+          Hyunjin Kim, khyunjin1993@g.skku.edu<br>
+          Jiwoo Kim, wldn9705@g.skku.edu<br>
           Hyejoon Jang, iris99hj@g.skku.edu
         </div>
         <div class="footer">
           <p>Advisor</p>
-          Prof. Jinyeong Bak, jy.bak@skku.edu<br><br>
+          Prof. Jinyeong Bak, jy.bak@skku.edu<br><br><br>
         </div>
         <div class="footer" style="margin-left:80px;">
-          <img src="{%static 'skku.png' %}" alt="SKKU" width="150" height="auto"  style="image-rendering: -webkit-optimize-contrast; margin-bottom:5px; vertical-align:baseline"><br>
+          <img src="{%static 'skku.png' %}" alt="SKKU" width="150" height="auto"  style="image-rendering: -webkit-optimize-contrast; margin:20px 0; vertical-align:baseline"><br>
         </div>
     </div>
   </footer>
+  <script type="text/javascript">
 
-<script type="text/javascript">
-
-  $(function() {
-    $(document).on("keydown", "form", function(event) {
-        return event.key != "Enter";
-    });
-    $("#result").hide();
-    $.getJSON( "./static/Q.json", function( json ) {
-      n = Math.floor(Math.random()*json.length);
-      user = ['A','B'];
-      data = json[n];
-      txt = "";
-      for(i=0; i< data.question.length; i++){
-        txt += user[i%2]+ " : " + data.question[i] + " " + "<br>";
-      }
-      txt += user[data.question.length%2] + " : <u>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</u>";
-      //txt += data.gold + " " + "<br>";
-
-      $("#context").html(txt);
-    });
-
-    function showResult(btn){
-      loader.setReload(true);
-      gold = data.gold;
-
-      $.ajax({
-        type: "POST",
-        url: "{% url "submit" %}",
-        data: JSON.stringify({"gold" : gold}),
-        success: function (response) {
-          loader.off();
-          ex = response.ex;
-          score_r = response.rouge_score;
-          score_b = response.bert_score;
-
-          //$("#ex1").html("1. "+ex[0]);
-          //$("#ex2").html("2. "+ex[1]);
-          //$("#ex3").html("3. "+ex[2]);
-
-          $("#result").slideDown();
-          for(i=0; i<3; i++){
-            $("#result"+String(i)).html(`<div style="color:#384269"><p style="margin-bottom:30px;">
-            <b>" ${ex[i]} "</b></p>Word-Level Score : <b>${score_r[i]}</b>/100
-            <div class="w3-progress-container w3-round-xlarge" style="margin-bottom:12px;">
-              <div class="w3-progressbar w3-round-xlarge" id="progressbar_r`+String(i)+`" style="width:0%">
-              </div>
-            </div>
-            Context-Level Score : <b>${score_b[i]}</b>/100<br>
-            <div class="w3-progress-container w3-round-xlarge">
-              <div class="w3-progressbar w3-round-xlarge" id="progressbar_b`+String(i)+`" style="width:0%">
-              </div>
-            </div>
-            <br></div>`);
-            progress(score_r[i], score_b[i], String(i));
-          }
-        },
-        error: function(){
-          loader.off();
-          $("#result"+btn).html(`<div style="color:#384269"><p><b>Input is not valid.<br>Please try again</b> 😥</p></div>`);
-          $("#result"+btn).slideDown();
-        }
+    var btn = 1;
+    var chat_window = 0;
+    $(function() {
+      $(document).on("keydown", "form", function(event) {
+          return event.key != "Enter";
       });
-      loader.on();
-    };
+  
+      function showResult(btn){
+        loader.setReload(true);
+        question = $("#inputDirect").val();
+        
+        $.ajax({
+          type: "POST",
+          url: "{% url "submit" %}",
+          data: JSON.stringify({"quiz" : btn, "question" : question}),
+          success: function (response) {
+            loader.off();
+            answer_document = response.answer_document;
+            answer_response = response.answer_response;
+            answer_source = response.answer_source;
+            answer_page = response.answer_page;
+            
+            temp = `<div class="questions" id="question${btn}"><p><b>${question}</b></p></div>
+            <div class="results" id="result${btn}"><p>Answer : <br><b>"${answer_response} "</b></p><br>
+              <p>Source :<br><b>${answer_source} (${answer_page}p)</b></p>
+              <p>Document :<br> <b>${answer_document}</b></p>
+            <br></div>`
+            $("#chat").append(temp);
 
+            chat_window += $('#result'+btn).prop('scrollHeight') + $('#question'+btn).prop('scrollHeight') + 50
+            $("#chat").css('height', chat_window+"px");
+            
+            $("input#inputDirect").val('');
 
-    function progress(score_r, score_b, n){
-      var elem = document.getElementById("progressbar_r"+n);
-      var width = 0;
-      var id = setInterval(frame, 5);
-      function frame() {
-        if (width >= score_r) {
-          clearInterval(id);
-        } else {
-          width += 1;
-          elem.style.width = width + '%';
-        }
+            $("#result"+btn).hide();
+            $("#question"+btn).hide();
+            $("#question"+btn).slideDown();
+            $("#result"+btn).slideDown();
+          },
+          error: function(){
+            loader.off();
+            temp = `<div class="questions" id="question${btn}"><p><b>${question}</b></p></div>
+            <div class="results" id="result${btn}"><p><b>Input is not valid.</b> 😥</p></div>`
+            $("#chat").append(temp);
+
+            chat_window += $('#result'+btn).height() + $('#question'+btn).height() + 20
+            $("#chat").css('height', chat_window+"px");
+            
+            $("input#inputDirect").val('');
+
+            $("#result"+btn).hide();
+            $("#question"+btn).hide();
+            $("#question"+btn).slideDown();
+            $("#result"+btn).slideDown();
+          }
+        });
+        loader.on();
       };
-      var elem1 = document.getElementById("progressbar_b"+n);
-      var width1 = 0;
-      var id1 = setInterval(frame1, 5);
-      function frame1() {
-        if (width1 >= score_b) {
-          clearInterval(id1);
-        } else {
-          width1 += 1;
-          elem1.style.width = width1 + '%';
-        }
-      }
-    };
-
-    $("#submit1").on('click', function(){ showResult(1)});
-
-
-  });
-
-
-
-</script>
-
+  
+      $("#submit1").on('click', function(){showResult(btn); btn = btn + 1});
+    });
+  </script>
 </body>
 </html>
