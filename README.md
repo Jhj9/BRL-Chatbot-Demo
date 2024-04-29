@@ -18,20 +18,15 @@
 3-2. 모델이 생성한 답변, 매뉴얼의 문맥 및 해당 문맥이 어떤 매뉴얼에서 추출되었는지에 대한 내용이 출력된다. <br>
 3-3. 계속해서 질문을 입력하여 테스트 해볼 수 있다. <br>
 
-Pycharm
 
-![화면 캡처 2022-04-13 141152](https://user-images.githubusercontent.com/50137851/163105666-d975d5a9-6f46-4015-bd12-92cf726cc163.png)
+1) https://github.com/Jhj9/BRL-Chatbot-Demo.git clone<br>
 
-1) Get from VCS로 시작하기
+2) pip install -r requirements.txt<br>
 
-2) https://github.com/Jhj9/BRL-Chatbot-Demo.git clone<br>
-
-3) pip install -r requirements.txt<br>
-
-5) mysite/secrets.json 생성 후 SECRET_KEY 입력 <br>
+3) mysite/secrets.json 생성 후 SECRET_KEY 입력 <br>
   Ex) {"SECRET_KEY": "django-insecure-dml=장고시크릿키50자"} <br>
   https://djecrety.ir/
 
-6) python manage.py runserver<br>
+4) python manage.py runserver<br>
 
-7) http://127.0.0.1:8000/ 웹페이지 실행
+5) http://127.0.0.1:8000/ 웹페이지 실행
